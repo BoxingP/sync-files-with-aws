@@ -1,0 +1,21 @@
+{
+  "aws_access_key_id": "",
+  "aws_secret_access_key": "",
+  "aws_region_name": "cn-northwest-1",
+  "aws_s3_bucket_name": "thermofisher-mall-prod-s3-s3",
+  "aws_s3_directory_name": "synced-files",
+  "path": [
+    {
+      "source": "D:\\SapOrders",
+      "target": "sap-orders/"
+    },
+    {
+      "source": "D:\\SapOrdersDetail",
+      "target": "sap-orders-detail/"
+    },
+    {
+      "source": "D:\\Share\\Winner List",
+      "target": "share-winner-list/"
+    }
+  ]
+}
