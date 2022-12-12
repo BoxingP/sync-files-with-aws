@@ -1,5 +1,7 @@
+import datetime
 import json
 import os
+from pathlib import Path
 
 import boto3
 import botocore
@@ -21,7 +23,15 @@ def empty_s3_directory(client, s3_directory, s3_bucket):
                 client.delete_object(Bucket=s3_bucket, Key=key)
 
 
-def upload_files_to_s3(client, local_directory, s3_bucket, s3_directory='', del_pre_upload=False):
+def append_time(filename):
+    p = Path(filename)
+    cst_now = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=8)))
+    return "{0}_{2}{1}".format(Path.joinpath(p.parent, p.stem), p.suffix, cst_now.strftime('%Y%m%d%H%M%S')).replace(
+        '\\', '/')
+
+
+def upload_files_to_s3(client, local_directory, s3_bucket, s3_directory='', del_pre_upload=False,
+                       append_time_tag=False):
     if del_pre_upload:
         empty_s3_directory(client, s3_directory=s3_directory, s3_bucket=s3_bucket)
     for root, dirs, files in os.walk(local_directory):
@@ -29,6 +39,8 @@ def upload_files_to_s3(client, local_directory, s3_bucket, s3_directory='', del_
             file_path = os.path.join(root, file)
             relative_path = os.path.relpath(file_path, local_directory)
             s3_path = os.path.join(s3_directory, relative_path).replace('\\', '/')
+            if append_time_tag:
+                s3_path = append_time(s3_path)
             print('Searching "%s" in "%s"' % (s3_path, s3_bucket))
             try:
                 client.head_object(Bucket=s3_bucket, Key=s3_path)
@@ -52,7 +64,8 @@ def main():
             local_directory=path['source'],
             s3_bucket=config['aws_s3_bucket_name'],
             s3_directory=os.path.join(config['aws_s3_directory_name'], path['target']).replace('\\', '/'),
-            del_pre_upload=True
+            del_pre_upload=True,
+            append_time_tag=True
         )
 
 
