@@ -42,7 +42,7 @@ def main():
             client,
             local_path=path['target'],
             s3_bucket=config['aws_s3_bucket_name'],
-            s3_directory=os.path.join(config['aws_s3_directory_name'], path['source']).replace('\\', '/')
+            s3_directory=os.path.join(config['aws_s3_prefix'], path['source']).replace('\\', '/')
         )
 
 

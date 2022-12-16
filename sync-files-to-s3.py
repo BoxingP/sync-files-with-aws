@@ -63,8 +63,8 @@ def main():
             client,
             local_directory=path['source'],
             s3_bucket=config['aws_s3_bucket_name'],
-            s3_directory=os.path.join(config['aws_s3_directory_name'], path['target']).replace('\\', '/'),
-            del_pre_upload=True,
+            s3_directory=os.path.join(config['aws_s3_prefix'], path['target']).replace('\\', '/'),
+            del_pre_upload=False,
             append_time_tag=True
         )
 
